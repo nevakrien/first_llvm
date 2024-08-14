@@ -9,21 +9,22 @@ EXE_FILE := test_quick_sort
 HAND_FILE = hand_quicksort.s 
 
 # Compiler flags
-CLANG_FLAGS := -g3 -gdwarf-4
-NASM_FLAGS := -g
+CLANG_FLAGS := -O3 #-gdwarf-4
+
+COMPILER = icx #clang
 
 # Default target
 all: build_ir
 
 # Target to build from LLVM IR
 build_ir: $(IR_FILE)
-	clang $(CLANG_FLAGS) -o $(ASM_FILE) -S -masm=intel $<
-	clang -o $(EXE_FILE) $(C_FILE) $(ASM_FILE) $(CLANG_FLAGS)
+	$(COMPILER) $(CLANG_FLAGS) -o $(ASM_FILE) -S -masm=intel $<
+	$(COMPILER) -o $(EXE_FILE) $(C_FILE) $(ASM_FILE) $(CLANG_FLAGS)
 	valgrind ./$(EXE_FILE)
 
 # Target to build directly from assembly
 build_asm: $(HAND_FILE)
-	clang -o $(EXE_FILE) $(C_FILE) $(HAND_FILE) $(CLANG_FLAGS)
+	$(COMPILER) -o $(EXE_FILE) $(C_FILE) $(HAND_FILE) $(CLANG_FLAGS)
 	valgrind ./$(EXE_FILE)
 
 # Clean target

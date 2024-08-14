@@ -1,97 +1,80 @@
 	.text
 	.intel_syntax noprefix
 	.file	"quick_sort.ll"
+	.intel_syntax noprefix
 	.globl	quick_sort                      # -- Begin function quick_sort
 	.p2align	4, 0x90
 	.type	quick_sort,@function
-quick_sort:                             # @quick_sort
-	.cfi_startproc
-# %bb.0:                                # %entry
-	sub	rsp, 88
-	.cfi_def_cfa_offset 96
-	mov	qword ptr [rsp + 64], rdi       # 8-byte Spill
-	mov	qword ptr [rsp + 72], rsi       # 8-byte Spill
-	add	rdi, 4
-	mov	qword ptr [rsp + 80], rdi       # 8-byte Spill
-	cmp	rdi, rsi
-	jbe	.LBB0_2
-# %bb.1:                                # %exit_early
-	add	rsp, 88
-	.cfi_def_cfa_offset 8
-	ret
-.LBB0_2:                                # %setup
-	.cfi_def_cfa_offset 96
-	mov	rax, qword ptr [rsp + 72]       # 8-byte Reload
-	mov	rcx, qword ptr [rsp + 80]       # 8-byte Reload
-	mov	rdx, qword ptr [rsp + 64]       # 8-byte Reload
-	mov	esi, dword ptr [rdx]
-	mov	dword ptr [rsp + 36], esi       # 4-byte Spill
-	mov	qword ptr [rsp + 40], rdx       # 8-byte Spill
-	mov	qword ptr [rsp + 48], rcx       # 8-byte Spill
-	mov	qword ptr [rsp + 56], rax       # 8-byte Spill
-.LBB0_3:                                # %loop
-                                        # =>This Inner Loop Header: Depth=1
-	mov	rdx, qword ptr [rsp + 40]       # 8-byte Reload
-	mov	rcx, qword ptr [rsp + 48]       # 8-byte Reload
-	mov	rax, qword ptr [rsp + 56]       # 8-byte Reload
-	mov	qword ptr [rsp + 8], rax        # 8-byte Spill
-	mov	qword ptr [rsp + 16], rcx       # 8-byte Spill
-	mov	qword ptr [rsp + 24], rdx       # 8-byte Spill
-	cmp	rax, rcx
-	jb	.LBB0_7
-# %bb.4:                                # %compare
-                                        #   in Loop: Header=BB0_3 Depth=1
-	mov	ecx, dword ptr [rsp + 36]       # 4-byte Reload
-	mov	rax, qword ptr [rsp + 16]       # 8-byte Reload
-	mov	eax, dword ptr [rax]
-	mov	dword ptr [rsp + 4], eax        # 4-byte Spill
-	cmp	eax, ecx
-	jg	.LBB0_6
-# %bb.5:                                # %append_left
-                                        #   in Loop: Header=BB0_3 Depth=1
-	mov	rax, qword ptr [rsp + 8]        # 8-byte Reload
-	mov	rdx, qword ptr [rsp + 16]       # 8-byte Reload
-	mov	rcx, rdx
-	add	rcx, 4
-	mov	qword ptr [rsp + 40], rdx       # 8-byte Spill
-	mov	qword ptr [rsp + 48], rcx       # 8-byte Spill
-	mov	qword ptr [rsp + 56], rax       # 8-byte Spill
-	jmp	.LBB0_3
-.LBB0_6:                                # %append_right
-                                        #   in Loop: Header=BB0_3 Depth=1
-	mov	rcx, qword ptr [rsp + 16]       # 8-byte Reload
-	mov	rdx, qword ptr [rsp + 24]       # 8-byte Reload
-	mov	rax, qword ptr [rsp + 8]        # 8-byte Reload
-	mov	esi, dword ptr [rsp + 4]        # 4-byte Reload
-	mov	edi, dword ptr [rax]
+quick_sort:                             # 
+# %bb.0:                                # 
+	push	r15
+	push	r14
+	push	rbx
+	lea	r14, [rdi + 4]
+	cmp	r14, rsi
+	ja	.LBB0_9
+# %bb.1:                                # 
+	mov	rbx, rdi
+	.p2align	4, 0x90
+.LBB0_2:                                # 
+                                        # =>This Loop Header: Depth=1
+                                        #     Child Loop BB0_3 Depth 2
+                                        #       Child Loop BB0_4 Depth 3
+	mov	eax, dword ptr [rbx]
+	mov	rcx, rsi
+	mov	r8, r14
+	mov	rdx, rbx
+.LBB0_3:                                # 
+                                        #   Parent Loop BB0_2 Depth=1
+                                        # =>  This Loop Header: Depth=2
+                                        #       Child Loop BB0_4 Depth 3
+	mov	r15, r8
+	.p2align	4, 0x90
+.LBB0_4:                                # 
+                                        #   Parent Loop BB0_2 Depth=1
+                                        #     Parent Loop BB0_3 Depth=2
+                                        # =>    This Inner Loop Header: Depth=3
+	mov	edi, dword ptr [r15]
+	cmp	edi, eax
+	jle	.LBB0_5
+# %bb.6:                                # 
+                                        #   in Loop: Header=BB0_4 Depth=3
+	mov	r8d, dword ptr [rcx]
+	mov	dword ptr [r15], r8d
 	mov	dword ptr [rcx], edi
-	mov	dword ptr [rax], esi
-	add	rax, -4
-	mov	qword ptr [rsp + 40], rdx       # 8-byte Spill
-	mov	qword ptr [rsp + 48], rcx       # 8-byte Spill
-	mov	qword ptr [rsp + 56], rax       # 8-byte Spill
-	jmp	.LBB0_3
-.LBB0_7:                                # %done_loop
-	mov	rcx, qword ptr [rsp + 64]       # 8-byte Reload
-	mov	rdi, qword ptr [rsp + 24]       # 8-byte Reload
-	mov	rsi, qword ptr [rsp + 72]       # 8-byte Reload
-	mov	eax, dword ptr [rsp + 36]       # 4-byte Reload
-	mov	edx, dword ptr [rdi]
-	mov	dword ptr [rcx], edx
-	mov	dword ptr [rdi], eax
-	add	rdi, 4
+	add	rcx, -4
+	cmp	rcx, r15
+	jae	.LBB0_4
+	jmp	.LBB0_7
+	.p2align	4, 0x90
+.LBB0_5:                                # 
+                                        #   in Loop: Header=BB0_3 Depth=2
+	lea	r8, [r15 + 4]
+	mov	rdx, r15
+	cmp	rcx, r8
+	jae	.LBB0_3
+	jmp	.LBB0_8
+	.p2align	4, 0x90
+.LBB0_7:                                # 
+                                        #   in Loop: Header=BB0_2 Depth=1
+	mov	edi, dword ptr [rdx]
+	mov	r15, rdx
+.LBB0_8:                                # 
+                                        #   in Loop: Header=BB0_2 Depth=1
+	mov	dword ptr [rbx], edi
+	mov	dword ptr [r15], eax
+	lea	rdi, [r15 + 4]
 	call	quick_sort@PLT
-	mov	rsi, qword ptr [rsp + 24]       # 8-byte Reload
-	mov	rdi, qword ptr [rsp + 64]       # 8-byte Reload
-	add	rsi, -4
-	call	quick_sort@PLT
-	add	rsp, 88
-	.cfi_def_cfa_offset 8
+	add	r15, -4
+	mov	rsi, r15
+	cmp	r14, r15
+	jbe	.LBB0_2
+.LBB0_9:                                # 
+	pop	rbx
+	pop	r14
+	pop	r15
 	ret
 .Lfunc_end0:
 	.size	quick_sort, .Lfunc_end0-quick_sort
-	.cfi_endproc
                                         # -- End function
 	.section	".note.GNU-stack","",@progbits
-	.addrsig
-	.addrsig_sym quick_sort

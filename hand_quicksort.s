@@ -6,8 +6,11 @@
     .type   quick_sort,@function
 quick_sort:                             # @quick_sort
 # %bb.0:                                # %entry
-    push    r11
+    
+    # saving for when we recurse
+    push    r11 
     push    r10
+
     lea r11, [rdi + 4]
     cmp r11, rsi
     ja  .LBB0_9
