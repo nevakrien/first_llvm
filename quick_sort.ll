@@ -1,51 +1,55 @@
-define void @quick_sort(i32* %arr,i64 %len) {
-	entry:
-	%pivot = load i32,i32* %arr
-	
-	%end_p = getelementptr i32*,i32* %arr,i64 %len
-	%first = getelementptr i32*,i32* %arr, i1 1
-	%last = getelementptr i32*,i32* %end_p, i2 -1
-	
+define void @quick_sort(i32* %start,i32* %end) {
+	entry: 
+		%degen = icmp ule i32* %start, %end
+		br i1 %degen , label %exit_early, label %setup
+	exit_early:
+		ret void
 
-	%insert_left = alloca i32*
-	%insert_right = alloca i32*
+	setup: 
+		%pivot = load i32,i32* %start
 
-	store i32* %arr, ptr %insert_left
-	store i32* %last, ptr %insert_right
+		%insert_left = alloca i32*
+		%insert_right = alloca i32*
 
-	%empty = icmp sle i64 %len, 0
-	br i1 %empty, label %end_empty, label %loop
-	
+		%first_ptr = getelementptr i32*,i32* %start, i1 1
+		store i32* %first_ptr, ptr %insert_left
+		store i32* %end, ptr %insert_right
+
+		br label %loop
 	loop:
-		%p =  phi i32* [ %first, %entry ], [ %next_p, %left ],[ %next_p, %right ]
-		%next_p = getelementptr i32*,i32* %p,i1 1
-		%done = icmp eq i32* %next_p, %end_p
+		%elem_ptr = load i32*, ptr %insert_left
+		%keep_looping = icmp ule i32* %start, %end
+		br i1 %keep_looping , label %compare, label %done_loop
 
-		%left_ptr = load i32*, ptr %insert_left
-		%right_ptr = load i32*,ptr %insert_right
+	compare:
+		%elem = load i32, i32* %elem_ptr
+		%bigger = icmp sgt i32 %elem,%pivot
+		br i1 %bigger, label %append_right , label %append_left
 
-		%elem = load i32, i32* %p
-		%biger = icmp sgt i32 %elem , %pivot
-		br i1 %biger, label %right,label %left
-
-	left:
-		%next_left = getelementptr i32*,i32* %left_ptr,i1 1
-		store i32* %next_left, ptr %insert_left
-
-		br i1 %done, label %recurse, label %loop
-
-	right:
-		%swap = load i32,ptr %right_ptr
-		store i32 %swap, ptr %right_ptr
-
-		%next_right = getelementptr i32*,i32* %right_ptr, i2 -1
-		store i32* %next_right, ptr %insert_right 
-
-		br i1 %done, label %recurse, label %loop
+	append_left:	
+		%next_left = getelementptr i32*,i32* %elem_ptr, i1 1
+		store i32* %next_left , ptr %insert_left
+		br label %loop
 	
-	recurse:
-	ret void
+	append_right:
+		%ins_ptr = load i32*, ptr %insert_right
+		%swap_elem = load i32, ptr %ins_ptr
+		store i32 %elem, ptr %ins_ptr
+		
+		%next_right = getelementptr i32*,i32* %ins_ptr, i2 -1
+		store i32* %next_right , ptr %insert_right
+		br label %loop
 
-	end_empty:
-	ret void
+	done_loop:
+		store i32 %elem, ptr %start
+		store i32 %pivot, ptr %elem_ptr
+
+		%end_left = getelementptr i32*,i32* %elem_ptr, i2 -1
+		call void @quick_sort(i32* %start,i32* %end_left)
+
+		%start_right = getelementptr i32*,i32* %elem_ptr, i2 1
+		call void @quick_sort(i32* %start_right,i32* %end)
+
+		ret void
+	
 }
