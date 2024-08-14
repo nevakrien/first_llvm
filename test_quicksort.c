@@ -23,18 +23,18 @@ int is_sorted(int* arr, int n) {
 }
 
 // Function to print the array
-void print_array(int* arr, int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
+void print_array(int* arr, int* end) {
+    for (; arr!=end; arr++) {
+        printf("%d ", *arr);
     }
-    printf("\n");
+    printf("%d \n", *arr);
 }
 
 int main() {
-    srand(time(0)); // Seed the random number generator
+    srand(23); // Seed the random number generator
 
     // Test with different array sizes
-    int sizes[] = {10, 15, 20, 25, 30};
+    int sizes[] = {10, 15, 20, 25, 30,100,56,77};
     int num_tests = sizeof(sizes) / sizeof(sizes[0]);
 
     for (int t = 0; t < num_tests; t++) {
@@ -44,13 +44,14 @@ int main() {
         generate_random_array(arr, n, 100); // Generate a random array with elements between 0 and 99
 
         printf("Test %d: starting array (size %d):\n", t + 1, n);
-        print_array(arr, n);
+        print_array(arr, arr+n-1);
 
         // Call the quick_sort function
         quick_sort(arr, arr + n - 1);
 
         printf("Test %d: output array:\n", t + 1);
-        print_array(arr, n);
+        print_array(arr, arr+n-1);
+
 
         // Verify if the array is sorted
         if (is_sorted(arr, n)) {

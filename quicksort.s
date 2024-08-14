@@ -14,7 +14,7 @@ quick_sort:                             # @quick_sort
 	add	rdi, 4
 	mov	qword ptr [rsp + 80], rdi       # 8-byte Spill
 	cmp	rdi, rsi
-	jb	.LBB0_2
+	jbe	.LBB0_2
 # %bb.1:                                # %exit_early
 	add	rsp, 88
 	.cfi_def_cfa_offset 8
@@ -72,17 +72,18 @@ quick_sort:                             # @quick_sort
 	mov	qword ptr [rsp + 56], rax       # 8-byte Spill
 	jmp	.LBB0_3
 .LBB0_7:                                # %done_loop
-	mov	rsi, qword ptr [rsp + 24]       # 8-byte Reload
-	mov	rdi, qword ptr [rsp + 64]       # 8-byte Reload
-	mov	eax, dword ptr [rsp + 36]       # 4-byte Reload
-	mov	ecx, dword ptr [rsi]
-	mov	dword ptr [rdi], ecx
-	mov	dword ptr [rsi], eax
-	add	rsi, -4
-	call	quick_sort@PLT
+	mov	rcx, qword ptr [rsp + 64]       # 8-byte Reload
 	mov	rdi, qword ptr [rsp + 24]       # 8-byte Reload
 	mov	rsi, qword ptr [rsp + 72]       # 8-byte Reload
+	mov	eax, dword ptr [rsp + 36]       # 4-byte Reload
+	mov	edx, dword ptr [rdi]
+	mov	dword ptr [rcx], edx
+	mov	dword ptr [rdi], eax
 	add	rdi, 4
+	call	quick_sort@PLT
+	mov	rsi, qword ptr [rsp + 24]       # 8-byte Reload
+	mov	rdi, qword ptr [rsp + 64]       # 8-byte Reload
+	add	rsi, -4
 	call	quick_sort@PLT
 	add	rsp, 88
 	.cfi_def_cfa_offset 8
