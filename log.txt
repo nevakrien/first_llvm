@@ -1,0 +1,12 @@
+Calling quick_sort with size 28
+left in 8 right in 28
+left in 8 right in 20
+left in 8 right in 12
+left in 8 right in 4
+Calling quick_sort with size 0
+Calling quick_sort with size 12
+left in 8 right in 12
+left in 16 right in 12
+Calling quick_sort with size 8
+Calling quick_sort with size 18446744073709551604
+8 3 5 8 1 8 1 8 
