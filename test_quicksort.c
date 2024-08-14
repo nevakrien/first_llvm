@@ -33,34 +33,50 @@ void print_array(int* arr, int* end) {
 int main() {
     srand(23); // Seed the random number generator
 
-    // Test with different array sizes
-    int sizes[] = {10, 15, 20, 25, 30,100,56,77};
-    int num_tests = sizeof(sizes) / sizeof(sizes[0]);
+    int max_tests = 10000; // Number of arrays to test
+    int max_value = 10000; // Maximum value for elements in the array
 
-    for (int t = 0; t < num_tests; t++) {
-        int n = sizes[t];
-        int arr[n];
+    for (int t = 0; t < max_tests; t++) {
+        int n;
 
-        generate_random_array(arr, n, 100); // Generate a random array with elements between 0 and 99
+        // Ensure that some arrays are at least 100,000 elements long
+        if (t % 100 == 0) {
+            n = 100000;
+        } else {
+            n = rand() % 100 + 10; // Array size between 10 and 109
+        }
+
+        int* arr = (int*)malloc(n * sizeof(int));
+
+        if (arr == NULL) {
+            printf("Memory allocation failed for test %d\n", t + 1);
+            return 1;
+        }
+
+        generate_random_array(arr, n, max_value); // Generate a random array with elements between 0 and 99
 
         printf("Test %d: starting array (size %d):\n", t + 1, n);
-        print_array(arr, arr+n-1);
+        // Optionally, print the array if needed for debugging
+        // print_array(arr, arr+n-1);
 
         // Call the quick_sort function
         quick_sort(arr, arr + n - 1);
 
         printf("Test %d: output array:\n", t + 1);
-        print_array(arr, arr+n-1);
-
+        // Optionally, print the array if needed for debugging
+        // print_array(arr, arr+n-1);
 
         // Verify if the array is sorted
         if (is_sorted(arr, n)) {
             printf("Test %d: The array is sorted correctly.\n", t + 1);
         } else {
             printf("Test %d: The array is NOT sorted correctly.\n", t + 1);
+            print_array(arr, arr+n-1);
+            free(arr);
             return 1;
         }
 
+        free(arr);
         printf("\n");
     }
 
