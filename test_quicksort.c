@@ -55,20 +55,20 @@ int main() {
 
         generate_random_array(arr, n, max_value); // Generate a random array with elements between 0 and 99
 
-        printf("Test %d: starting array (size %d):\n", t + 1, n);
+        // printf("Test %d: starting array (size %d):\n", t + 1, n);
         // Optionally, print the array if needed for debugging
         // print_array(arr, arr+n-1);
 
         // Call the quick_sort function
         quick_sort(arr, arr + n - 1);
 
-        printf("Test %d: output array:\n", t + 1);
+        // printf("Test %d: output array:\n", t + 1);
         // Optionally, print the array if needed for debugging
         // print_array(arr, arr+n-1);
 
         // Verify if the array is sorted
         if (is_sorted(arr, n)) {
-            printf("Test %d: The array is sorted correctly.\n", t + 1);
+            // printf("Test %d: The array is sorted correctly.\n", t + 1);
         } else {
             printf("Test %d: The array is NOT sorted correctly.\n", t + 1);
             print_array(arr, arr+n-1);
@@ -77,8 +77,8 @@ int main() {
         }
 
         free(arr);
-        printf("\n");
+        // printf("\n");
     }
-
+    printf("passed\n");
     return 0;
 }
